@@ -138,14 +138,14 @@ module.exports.generateWebfont = (event, context, callback) => {
 			fontName          : webfontOptions.name,
 			html              : true,
 			//htmlDest          : '/tmp/',
-			//htmlTemplate      : 'templates/html.hbs',
-			//json              : true,
+			htmlTemplate      : 'templates/html.hbs',
+			json              : true,
 			normalize         : true,
 			round             : 10e12,
 			//templateOptions   : {},
 		  };
 		  console.log("\nStart generating webfont:\n", util.inspect(config, {depth: 5}));
-		  webfontsGenerator(config, function (error) {
+		  webfontsGenerator(config, function (error, result) {
 			if (error) {
 			  console.log('An error occured, while generating the webfont.', error);
 			  next(error);
@@ -160,30 +160,22 @@ module.exports.generateWebfont = (event, context, callback) => {
 			  });
 
 			  // If specified, generate JSON icons map by parsing the generated CSS
-			  /*if (options.json) {
-				const jsonPath = (
-					options.jsonPath ||
-					`${ path.join(outputDir, '/' + fontName) }.json`
-				)
-				const css = results[0].generateCss()
-				let map = {}
-
-				// Log JSON map output
-				logOutput(options, [
-				  outputDir,
-				  options.jsonPath || `${ fontName }.json`
-				])
-
+			  if (config.json) {
+				const jsonPath = `/tmp/${config.fontName}.json`;
+				console.log(`\nGenerate JSON map ${jsonPath}.\n`);
+				let map = {};
+				const css = result.generateCss();
+				const CSS_PARSE_REGEX = /\-(.*)\:before.*\n\s*content: "(.*)"/gm;
 				css.replace(CSS_PARSE_REGEX, (match, name, code) => {
 				  map[name] = code
-				})
+				});
 
-				fs.writeFile(jsonPath, JSON.stringify(map, null, 4), done)
+				fs.writeFile(jsonPath, JSON.stringify(map, null, 4), next);
 			  } else {
-				done()
-			  }*/
+				next();
+			  }
 
-			  next();
+
 			}
 		  });
 		},
@@ -234,7 +226,9 @@ module.exports.generateWebfont = (event, context, callback) => {
 			  })
 
 			} else {
-			  console.log(`Skip ${file}, it's not a webfont file.`);
+			  if (fileExt !== '.svg') {
+				console.log(`Skip ${file}, it's not a webfont file.`);
+			  }
 			  callback();
 			}
 		  }, function (err) {

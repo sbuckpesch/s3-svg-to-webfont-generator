@@ -1,42 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>{{fontName}}</title>
-	<style>
-		body {
-			font-family: sans-serif;
-			margin: 0;
-			padding: 10px 20px;
-		}
-
-		.preview {
-			line-height: 2em;
-		}
-
-		.preview__icon {
-			display: inline-block;
-			width: 32px;
-			text-align: center;
-		}
-
-		.icon {
-			display: inline-block;
-			font-size: 16px;
-		}
-
-		{{{styles}}}
-	</style>
+    <meta charset="UTF-8">
+    <title>{{fontName}}</title>
+    <style>
+            {{{styles}}}
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-	<h1>{{fontName}}</h1>
-	{{#each names}}
-	<div class="preview">
-		<span class="preview__icon">
-			<span class="icon {{../classPrefix}}{{this}}"></span>
-		</span>
-		<span>{{this}}</span>
-	</div>
-	{{/each}}
+<div class="container my-5">
+    <h1>{{fontName}}</h1>
+    <div class="row">
+        {{#each names}}
+            <div class="col-sm-2">
+                <div class="card text-center" style="width: 100%;">
+                    <div class="card-body">
+                        <h1 class="card-title text-center my-3">
+                            <span class="icon {{../classPrefix}}{{this}}"></span>
+                        </h1>
+                        <h6 class="card-subtitle mb-2 text-muted">{{this}}</h6>
+                        <p><code>icon {{../classPrefix}}{{this}}</code></p>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>
 </body>
 </html>
