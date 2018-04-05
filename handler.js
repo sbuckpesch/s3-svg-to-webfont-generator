@@ -142,7 +142,9 @@ module.exports.generateWebfont = (event, context, callback) => {
 			json              : true,
 			normalize         : true,
 			round             : 10e12,
-			//templateOptions   : {},
+			templateOptions   : {
+			  bucket: `https://${webfontOptions.bucket}.s3.amazonaws.com/${webfontOptions.name}/`
+			},
 		  };
 		  console.log("\nStart generating webfont:\n", util.inspect(config, {depth: 5}));
 		  webfontsGenerator(config, function (error, result) {
@@ -174,8 +176,6 @@ module.exports.generateWebfont = (event, context, callback) => {
 			  } else {
 				next();
 			  }
-
-
 			}
 		  });
 		},
@@ -240,8 +240,35 @@ module.exports.generateWebfont = (event, context, callback) => {
 			// All tasks are done now
 			console.log(
 				`${payload.files.length} webfont files uploaded to '${webfontOptions.bucket}/${dir}/\n`);
-			next(null, payload);
+
+
+			// Cleanup
+			console.log('Delete all files in /tmp/ folder.');
+			const directory = '/tmp/';
+
+			fs.readdir(directory, (err, files) => {
+			  if (err) throw err;
+
+			  for (const file of files) {
+				fs.unlink(path.join(directory, file), err => {
+				  if (err) throw err;
+				});
+			  }
+
+			  next(null, payload);
+			});
+
+
 		  });
+		},
+		/**
+		 * Cleanup Lambda environment
+		 * @param next
+		 */
+		function cleanup(next) {
+
+
+
 		}
 	  ],
 
