@@ -119,38 +119,24 @@ module.exports.generateWebfont = (event, context, callback) => {
 		 * @param next
 		 */
 		function generateFont(payload, next) {
-		  // Run the webfont CLI command
-		  /*const args = [
-			`${webfontOptions.source}*.svg`,
-			`--out=${webfontOptions.source}`,
-			`--fontspath=${webfontOptions.path}`,
-			`--name=${webfontOptions.name}`,
-			`--prefix=icon`,
-			`--normalize=true`,
-			`--tag=${webfontOptions.name}`,
-			`--json=true`,
-			`--jsonpath=/${webfontOptions.name}.json`,
-			`--csspath=output/${webfontOptions.name}.scss`,  // CSS output path (Defaults to <out>/<name>.css)
-			`--json=true`,  // CSS output path (Defaults to <out>/<name>.css)
-		  ];*/
-
 		  // @see https://www.npmjs.com/package/webfonts-generator
 		  let config = {
 			baseTag           : 'i',
-			classPrefix       : 'icons-',
+			baseSelector      : '.icon',
+			classPrefix       : 'icon-',
 			//cssDest    : '/tmp/',
 			//cssFontsUrl     : options.fontsPath,
 			//cssTemplate: 'templates/css.hbs',
 			//types      : ['eot', 'woff2', 'woff', 'ttf', 'svg']
-			//centerHorizontally: true,
-			//css               : true,
-			//decent            : 150,
+			centerHorizontally: true,
+			css               : true,
+			decent            : 150,
 			dest              : '/tmp/',
 			files             : payload.files,
-			//fixedWidth        : true, // Creates a monospace font of the width of the largest input icon.
-			//fontHeight        : 1000,
+			fixedWidth        : true, // Creates a monospace font of the width of the largest input icon.
+			fontHeight        : 1000,
 			fontName          : webfontOptions.name,
-			//html              : true,
+			html              : true,
 			//htmlDest          : '/tmp/',
 			//htmlTemplate      : 'templates/html.hbs',
 			//json              : true,
