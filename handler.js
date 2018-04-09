@@ -165,8 +165,8 @@ module.exports.generateWebfont = (event, context, callback) => {
 			  if (config.json) {
 				const jsonPath = `/tmp/${config.fontName}.json`;
 				console.log(`\nGenerate JSON map ${jsonPath}.\n`);
-				let map = {};
-				const css = result.generateCss();
+				let map               = {};
+				const css             = result.generateCss();
 				const CSS_PARSE_REGEX = /\-(.*)\:before.*\n\s*content: "(.*)"/gm;
 				css.replace(CSS_PARSE_REGEX, (match, name, code) => {
 				  map[name] = code
@@ -205,12 +205,42 @@ module.exports.generateWebfont = (event, context, callback) => {
 				  return;
 				}
 
+				// Get the correct content type for the current file
+				let contentType = 'text/plain';
+				switch (fileExt) {
+				  case '.eot':
+					contentType = 'application/vnd.ms-fontobject';
+					break;
+				  case '.woff2':
+					contentType = 'font/woff2';
+					break;
+				  case '.woff':
+					contentType = 'application/font-woff';
+					break;
+				  case '.ttf':
+					contentType = 'application/font-sfnt';
+					break;
+				  case '.css':
+					contentType = 'text/css';
+					break;
+				  case '.html':
+					contentType = 'text/html';
+					break;
+				  case '.scss':
+					contentType = 'text/x-scss';
+					break;
+				  case '.json':
+					contentType = 'application/json';
+					break;
+				}
+
 				// Buffer Pattern; how to handle buffers; straw, intake/outtake analogy
 				var base64data = new Buffer(data, 'binary');
 				s3.putObject({
-				  Bucket: webfontOptions.bucket,
-				  Key   : `${dir}/${file}`,
-				  Body  : base64data
+				  Bucket     : webfontOptions.bucket,
+				  Key        : `${dir}/${file}`,
+				  Body       : base64data,
+				  ContentType: contentType
 				}, function (err, data) {
 				  if (err) {
 					console.error(err.code, "-", err.message);
@@ -266,7 +296,6 @@ module.exports.generateWebfont = (event, context, callback) => {
 		 * @param next
 		 */
 		function cleanup(next) {
-
 
 
 		}

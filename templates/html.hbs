@@ -14,8 +14,10 @@
     <h1 class="display-1">{{fontName}}</h1>
 
     <p class="lead">
-        To use this icon font, add the CSS file to your HTML page head. <br>
+        To use this icon font, add the CSS file to your <strong>HTML page head</strong>. <br>
         <code>&lt;link rel="stylesheet" href="{{bucket}}{{fontName}}.css"&gt;</code>
+        or <strong>import in your SCSS file</strong>
+        <code>@import url({{bucket}}{{fontName}}.css);</code>
     </p>
 
     <div class="row">
@@ -41,7 +43,7 @@
             <tbody>
             <tr>
                 <th scope="row">HTML</th>
-                <td><a href="{{bucket}}{{fontName}}.css">{{bucket}}{{fontName}}.html</a></td>
+                <td><a href="{{bucket}}{{fontName}}.html">{{bucket}}{{fontName}}.html</a></td>
             </tr>
             <tr>
                 <th scope="row">CSS</th>
@@ -76,6 +78,18 @@
         <p class="alert alert-warning">
             Please make sure, your bucket is publicly accessible!
             <a href="https://havecamerawilltravel.com/photographer/how-allow-public-access-amazon-bucket/" target="_blank">Make public!</a>
+        </p>
+        <p class="alert alert-warning">
+            Please make sure, to set CORS settings of your bucket to:
+            <code>
+                &lt;?xml version="1.0" encoding="UTF-8"?&lt;
+                &lt;CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/"&lt;
+                    &lt;CORSRule&lt;
+                        &lt;AllowedOrigin&lt;*&lt;/AllowedOrigin&lt;
+                        &lt;AllowedMethod&lt;GET&lt;/AllowedMethod&lt;
+                    &lt;/CORSRule&lt;
+                &lt;/CORSConfiguration&lt;
+            </code>
         </p>
     </div>
 </div>
