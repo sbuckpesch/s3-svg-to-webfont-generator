@@ -24,6 +24,8 @@ custom:
 provider:
   name: aws
   runtime: nodejs8.10
+  timeout: 60 # optional, in seconds, default is 6
+  versionFunctions: false # optional, default is true
 
 # you can overwrite defaults here
   stage: dev
