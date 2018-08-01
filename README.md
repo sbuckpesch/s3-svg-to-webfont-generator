@@ -19,9 +19,8 @@ make it easy for everyone. This **AWS Lambda function** will:
 2. Edit the serverless.yml file and enter a new and unique
    `bucket_name`, `region` and `stage`
 3. `sls deploy`
-4. [Make your bucket publicly available](https://havecamerawilltravel.com/photographer/how-allow-public-access-amazon-bucket/)
-5. Create a folder on your s3 bucket and put some SVG files in it
-6. Enjoy! :-)
+4. Create a folder on your s3 bucket and put some SVG files in it
+5. Enjoy! :-)
 
 ## LICENSE
 

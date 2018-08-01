@@ -47,9 +47,57 @@ functions:
     handler: handler.generateWebfont
     events:
       - s3:
-          bucket: ${self:custom.bucket_name}
+          bucket: fonts
           events:
             - s3:ObjectCreated:*
           rules:
             - suffix: .svg
 
+resources:
+  Resources:
+    S3BucketFonts:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: PublicRead
+        BucketName: ${self:custom.bucket_name}
+        CorsConfiguration:
+          CorsRules:
+          - AllowedOrigins:
+            - "*"
+            AllowedMethods:
+            - "GET"
+
+    S3BucketFontsPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: S3BucketFonts
+        PolicyDocument:
+          Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: "*"
+            Action:
+            - s3:GetObject
+            Resource:
+              Fn::Join: [
+                "", [
+                "arn:aws:s3:::",
+                {
+                  "Ref": "S3BucketFonts"
+                },
+                "/*"
+              ]
+              ]
+    GenerateWebfontLambdaPermissionFontsS3:
+      Type: "AWS::Lambda::Permission"
+      Properties:
+        FunctionName:
+          "Fn::GetAtt":
+          - GenerateWebfontLambdaFunction
+          - Arn
+        Principal: "s3.amazonaws.com"
+        Action: "lambda:InvokeFunction"
+        SourceAccount:
+          Ref: AWS::AccountId
+        SourceArn: "arn:aws:s3:::${self:custom.bucket_name}"
