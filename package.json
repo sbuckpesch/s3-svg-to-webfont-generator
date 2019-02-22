@@ -1,5 +1,10 @@
 {
   "dependencies": {
     "webfonts-generator": "^0.4.0"
+  },
+  "scripts": {
+    "deploy": "sls deploy",
+    "deploy:function": "sls deploy -f generateWebfont",
+    "logs:generateWebfont": "sls logs -f generateWebfont --startTime 1m -t"
   }
 }
